@@ -1,0 +1,21 @@
+import React from 'react'
+import ProductCard from './ProductCard'
+
+const ProductListing = ({products}) => {
+  return (
+    <div className="max-w-[1152px] mx-auto">
+        <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-y-8 gap-x-6'>
+            {products.length>0?(
+                products.map((product)=>(
+                    <ProductCard key={product.productId} product={product}/>
+                ))
+            ):(
+                <p className='text-center font-primary fornt-bold text-lg text-primary'>No product found</p>
+            )}
+
+        </div>
+    </div>
+  )
+}
+
+export default ProductListing
