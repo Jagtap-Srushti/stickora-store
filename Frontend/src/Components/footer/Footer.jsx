@@ -4,7 +4,7 @@ import { faHeart } from '@fortawesome/free-solid-svg-icons'
 
 function Footer() {
   return (
-    <footer className='flex justify-center items-center py-4 font-primary text-gray-700 border-t mt-10'>
+    <footer className='flex justify-center items-center py-4 font-primary text-gray-700 dark:text-gray-300 border-t mt-10'>
 
       <p className='flex items-center text-sm sm:text-base'>
 
@@ -18,7 +18,7 @@ function Footer() {
 
         by
 
-        <span className='text-primary font-semibold ml-2'>
+        <span className='text-primary dark:text-light font-semibold px-1 transition-colors duration-300 hover:text-dark dark:hover:text-lighter'>
           Stickora
         </span>
 
