@@ -2,7 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/stickora.iml" filepath="$PROJECT_DIR$/.idea/stickora.iml" />
+      <module fileurl="file://$PROJECT_DIR$/stickora/stickora.iml" filepath="$PROJECT_DIR$/stickora/stickora.iml" />
+      <module fileurl="file://$PROJECT_DIR$/techHub/techHub.iml" filepath="$PROJECT_DIR$/techHub/techHub.iml" />
     </modules>
   </component>
 </project>
