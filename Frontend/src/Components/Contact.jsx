@@ -4,10 +4,35 @@ import { Form } from "react-router-dom";
 import apiClient from "../api/apiClient";
 import { useActionData, useNavigation, useSubmit } from "react-router-dom";
 import { useEffect, useRef } from "react";
-// import { toast } from "react-toastify";
+import { toast } from "react-toastify";
 import { redirect } from "react-router-dom";
 
-const Contact = () => {
+export default function Contact() {
+  const actionData = useActionData();
+  const formRef = useRef(null);
+  const navigation = useNavigation();
+  const submit = useSubmit();
+  const isSubmitting = navigation.state === "submitting";
+  useEffect(() => {
+    if (actionData?.success) {
+      formRef.current?.reset();
+      toast.success("Your message has been submitted successfully!");
+    }
+  }, [actionData]);
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    const userConfirmed = window.confirm(
+      "Are you sure you want to submit the form?"
+    );
+
+    if (userConfirmed) {
+      const formData = new FormData(formRef.current); // Get form data
+      submit(formData, { method: "post" }); // Proceed with form submission
+    } else {
+      toast.info("Form submission cancelled.");
+    }
+  };
 
   const labelStyle =
     "block text-lg font-semibold text-primary dark:text-light mb-2";
@@ -114,7 +139,22 @@ const Contact = () => {
   );
 }
 
+export async function contactAction({ request, params }) {
+  const data = await request.formData();
 
-
-
-export default Contact
+  const contactData = {
+    name: data.get("name"),
+    email: data.get("email"),
+    mobileNumber: data.get("mobileNumber"),
+    message: data.get("message"),
+  };
+  try {
+    await apiClient.post("/contacts", contactData);
+    return { success: true };
+  } catch (error) {
+    throw new Response(
+      error.message || "Failed to submit your message. Please try again.",
+      { status: error.status || 500 }
+    );
+  }
+}
