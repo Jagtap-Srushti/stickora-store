@@ -4,6 +4,8 @@ package com.srushti.stickora.controller;
 import com.srushti.stickora.dto.ProductDto;
 import com.srushti.stickora.service.IProductService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,8 +21,8 @@ public class ProductController {
 
     private final IProductService iProductService;
     @GetMapping
-    public List<ProductDto> getProducts(){
+    public ResponseEntity<List<ProductDto>> getProducts(){
         List<ProductDto> productList=iProductService.getProductService();
-        return productList;
+        return ResponseEntity.status(HttpStatus.OK).body(productList);
     }
 }
