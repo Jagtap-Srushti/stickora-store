@@ -12,6 +12,7 @@ import Cart from './Components/Cart.jsx'
 import Home, { productsLoader } from './Components/Home.jsx'
 import ErrorPage from './Components/ErrorPage.jsx'
 import ProductDetail from './Components/ProductDetail.jsx'
+import { CartProvider } from './store/cart.context.jsx'
 
 
 
@@ -30,9 +31,13 @@ const routeDefinitions = createRoutesFromElements(
 
 const appRouter = createBrowserRouter(routeDefinitions);
 
+
+
 createRoot(document.getElementById('root')).render(
   <StrictMode>
+    <CartProvider>
     <RouterProvider router={appRouter} />
+    </CartProvider>
     <ToastContainer
       position="top-center"
       autoClose={3000}
