@@ -37,7 +37,7 @@ public class AuthController {
             Authentication authentication = authenticationManager.authenticate(new
                     UsernamePasswordAuthenticationToken(loginRequestDto.username(),
                     loginRequestDto.password()));
-            
+
             var userDto = new UserDto();
             var loggedInUser = (User) authentication.getPrincipal();
             userDto.setName(loggedInUser.getUsername());

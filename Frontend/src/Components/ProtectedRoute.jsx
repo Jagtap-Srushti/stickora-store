@@ -1,11 +1,19 @@
 import React from 'react';
-import { Outlet, Navigate } from 'react-router-dom';
+import { useEffect } from 'react';
+import { Outlet, Navigate ,useLocation} from 'react-router-dom';
 import { useAuth } from '../store/auth-context';
 
 const ProtectedRoute = () => {
     const { isAuthenticated } = useAuth();
+  const location = useLocation();
 
-    return isAuthenticated ? <Outlet /> : <Navigate to="/login" />;
+  useEffect(() => {
+    if (!isAuthenticated && location.pathname !== "/login") {
+      sessionStorage.setItem("redirectPath", location.pathname);
+    }
+  }, [isAuthenticated, location.pathname]);
+
+  return isAuthenticated ? <Outlet /> : <Navigate to="/login" />;
 };
 
 export default ProtectedRoute;
