@@ -8,7 +8,7 @@ import { Link, useNavigate } from "react-router-dom";
 import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useRef } from "react";
-import { useCart } from "../store/cart.context";
+import { useCart } from "../store/cart-context";
 
 const ProductDetail = () => {
     const handleAddToCart = () => {

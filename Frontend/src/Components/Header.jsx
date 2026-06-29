@@ -7,11 +7,11 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { useState, useEffect } from "react";
 import { Link, NavLink } from "react-router-dom";
-import { useCart } from "../store/cart.context";
+import { useCart } from "../store/cart-context";
 
 const Header = () => {
 
-   const [theme, setTheme] = useState(() => {
+  const [theme, setTheme] = useState(() => {
     return localStorage.getItem("theme") === "dark" ? "dark" : "light";
   });
 

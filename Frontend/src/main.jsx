@@ -7,12 +7,15 @@ import "react-toastify/dist/ReactToastify.css"
 import { createBrowserRouter, createRoutesFromElements, Route, RouterProvider } from 'react-router-dom'
 import About from './Components/About.jsx'
 import Contact, { contactAction } from './Components/Contact.jsx'
-import Login from './Components/Login.jsx'
+import Login, { loginAction } from './Components/Login.jsx'
 import Cart from './Components/Cart.jsx'
 import Home, { productsLoader } from './Components/Home.jsx'
 import ErrorPage from './Components/ErrorPage.jsx'
 import ProductDetail from './Components/ProductDetail.jsx'
-import { CartProvider } from './store/cart.context.jsx'
+import { CartProvider } from './store/cart-context.jsx'
+import { AuthProvider } from './store/auth-context.jsx'
+import CheckoutForm from './Components/CheckoutForm.jsx'
+import ProtectedRoute from './Components/ProtectedRoute.jsx'
 
 
 
@@ -23,9 +26,13 @@ const routeDefinitions = createRoutesFromElements(
     <Route path="/home" element={<Home />} loader={productsLoader} />
     <Route path="/about" element={<About />} />
     <Route path="/contact" element={<Contact />} action={contactAction} />
-    <Route path="/login" element={<Login />} />
+    <Route path="/login" element={<Login />} action={loginAction} />
     <Route path="/cart" element={<Cart />} />
-    <Route path="/products/:productId" element={<ProductDetail/>} />
+    <Route path="/products/:productId" element={<ProductDetail />} />
+
+    <Route element={<ProtectedRoute/>}>
+      <Route path="/checkout" element={<CheckoutForm/>}/>
+    </Route>
   </Route>
 );
 
@@ -35,9 +42,11 @@ const appRouter = createBrowserRouter(routeDefinitions);
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
+    <AuthProvider>
     <CartProvider>
-    <RouterProvider router={appRouter} />
+      <RouterProvider router={appRouter} />
     </CartProvider>
+    </AuthProvider>
     <ToastContainer
       position="top-center"
       autoClose={3000}
@@ -48,7 +57,7 @@ createRoot(document.getElementById('root')).render(
       pauseOnFocusLoss
       draggable
       pauseOnHover
-      theme={localStorage.getItem("theme")==="dark"?"dark":"light"}
+      theme={localStorage.getItem("theme") === "dark" ? "dark" : "light"}
       transition={Bounce}
     />
   </StrictMode>

@@ -2,9 +2,10 @@ import PageTitle from "./PageTitle";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import emptyCartImage from "../assets/util/emptycart.png";
-import { useCart } from "../store/cart.context";
+import { useCart } from "../store/cart-context";
 import CartTable from "./CartTable";
 import { useMemo } from "react";
+import CheckoutForm from "./CheckoutForm";
 
 const Cart = () => {
   const { cart } = useCart();
@@ -18,7 +19,7 @@ const Cart = () => {
         <PageTitle title="Your Cart" />
         {!isCartEmpty ? (
           <>
-            <CartTable/>
+            <CartTable />
             <div className="flex justify-between mt-8 space-x-4">
               {/* Back to Products Button */}
               <Link
@@ -28,9 +29,9 @@ const Cart = () => {
                 Back to Products
               </Link>
               {/* Proceed to Checkout Button */}
-              <button className="py-2 px-4 bg-primary dark:bg-light text-white dark:text-black text-xl font-semibold rounded-sm flex justify-center items-center hover:bg-dark dark:hover:bg-lighter transition">
+              <Link to="/checkout" className="py-2 px-4 bg-primary dark:bg-light text-white dark:text-black text-xl font-semibold rounded-sm flex justify-center items-center hover:bg-dark dark:hover:bg-lighter transition">
                 Proceed to Checkout
-              </button>
+              </Link>
             </div>
           </>
         ) : (
