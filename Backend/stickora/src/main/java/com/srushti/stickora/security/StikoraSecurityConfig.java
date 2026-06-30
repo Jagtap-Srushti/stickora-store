@@ -5,8 +5,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.authentication.password.CompromisedPasswordChecker;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -17,6 +19,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.password.HaveIBeenPwnedRestApiPasswordChecker;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -47,27 +50,23 @@ public class StikoraSecurityConfig {
         return http.build();
     }
 
-    @Bean
-    public UserDetailsService userDetailsService(){
-        var user1= User.builder().username("abcd").password("$2a$12$qOCui9JeeLPW.nnvGy9O1.gAhqBzFRIgli7pCt2NVAz6bKvMlBVlW").roles("USER").build();
-        var user2= User.builder().username("wxyz").password("$2a$12$ytZLHTtzzbKPM0QCt52gv.tEptxUYIc1nMS44TbmJxJ3ipEDKmdla").roles("ADMIN","USER").build();
-        return new InMemoryUserDetailsManager(user1,user2);
-    }
+
 
     @Bean
-    public AuthenticationManager authenticationManager(UserDetailsService userDetailsService) {
-
-        DaoAuthenticationProvider daoAuthenticationProvider =
-                new DaoAuthenticationProvider(userDetailsService);
-
-        daoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
-
-        return new ProviderManager(daoAuthenticationProvider);
+    public AuthenticationManager authenticationManager(
+            AuthenticationProvider authenticationProvider) {
+        var providerManager = new ProviderManager(authenticationProvider);
+        return providerManager;
     }
 
     @Bean
     public PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public CompromisedPasswordChecker compromisedPasswordChecker() {
+        return new HaveIBeenPwnedRestApiPasswordChecker();
     }
 
     @Bean

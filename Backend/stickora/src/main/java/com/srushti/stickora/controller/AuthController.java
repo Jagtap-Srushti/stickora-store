@@ -4,10 +4,14 @@ import com.srushti.stickora.dto.LoginRequestDto;
 import com.srushti.stickora.dto.LoginResponseDto;
 import com.srushti.stickora.dto.RegisterRequestDto;
 import com.srushti.stickora.dto.UserDto;
+import com.srushti.stickora.entity.Customer;
+import com.srushti.stickora.repository.CustomerRepository;
 import com.srushti.stickora.util.JwtUtil;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.BeanUtils;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.password.CompromisedPasswordDecision;
 import org.springframework.security.core.Authentication;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,7 +35,7 @@ import java.util.List;
 public class AuthController {
 
     private final AuthenticationManager authenticationManager;
-    private final InMemoryUserDetailsManager inMemoryUserDetailsManager;
+    private final CustomerRepository customerRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
 
@@ -67,10 +71,34 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<String> registerUser(@Valid @RequestBody RegisterRequestDto registerRequestDto) {
-        inMemoryUserDetailsManager.createUser(new User(registerRequestDto.getEmail(),
-                passwordEncoder.encode(registerRequestDto.getPassword()),
-                List.of(new SimpleGrantedAuthority("USER"))));
+    public ResponseEntity<?> registerUser(@Valid @RequestBody RegisterRequestDto registerRequestDto) {
+
+        AnnotationNode compromisedPasswordChecker;
+        CompromisedPasswordDecision decision = compromisedPasswordChecker.check(registerRequestDto.getPassword());
+        if(decision.isCompromised()) {
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body(Map.of("password", "Choose a strong password"));
+        }
+        Optional<Customer> existingCustomer =  customerRepository.findByEmailOrMobileNumber
+                (registerRequestDto.getEmail(),registerRequestDto.getMobileNumber());
+        if(existingCustomer.isPresent()) {
+            Map<String, String> errors = new HashMap<>();
+            Customer customer = existingCustomer.get();
+
+            if (customer.getEmail().equalsIgnoreCase(registerRequestDto.getEmail())) {
+                errors.put("email", "Email is already registered");
+            }
+            if (customer.getMobileNumber().equals(registerRequestDto.getMobileNumber())) {
+                errors.put("mobileNumber", "Mobile number is already registered");
+            }
+
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
+        }
+        Customer customer = new Customer();
+        BeanUtils.copyProperties(registerRequestDto, customer);
+        customer.setPasswordHash(passwordEncoder.encode(registerRequestDto.getPassword()));
+        customerRepository.save(customer);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body("Registration successful");
