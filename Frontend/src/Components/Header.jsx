@@ -11,8 +11,8 @@ import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { useCart } from "../store/cart-context";
 import { useAuth } from "../store/auth-context";
 import { toast } from "react-toastify";
-const Header = () => {
 
+export default function Header() {
   const [theme, setTheme] = useState(() => {
     return localStorage.getItem("theme") === "dark" ? "dark" : "light";
   });
@@ -67,7 +67,6 @@ const Header = () => {
 
   const dropdownLinkClass =
     "block w-full text-left px-4 py-2 text-lg font-primary font-semibold text-primary dark:text-light hover:bg-gray-100 dark:hover:bg-gray-600";
-
 
   return (
     <header className="border-b border-gray-300 dark:border-gray-600 sticky top-0 z-20 bg-normalbg dark:bg-darkbg">
@@ -125,11 +124,13 @@ const Header = () => {
                     onClick={toggleUserMenu}
                     className="relative text-primary"
                   >
-                    <span className={navLinkClass}>{`Hello ${
+                    <span className={navLinkClass}>
+                      {`Hello ${
                         user.name.length > 5
                           ? `${user.name.slice(0, 5)}...`
                           : user.name
-                      }`}</span>
+                      }`}
+                    </span>
                     <FontAwesomeIcon
                       icon={faAngleDown}
                       className="text-primary dark:text-light w-6 h-6"
@@ -221,4 +222,3 @@ const Header = () => {
     </header>
   );
 }
-export default Header;

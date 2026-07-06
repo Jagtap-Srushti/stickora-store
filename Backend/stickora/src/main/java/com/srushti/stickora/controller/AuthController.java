@@ -10,13 +10,14 @@ import com.srushti.stickora.util.JwtUtil;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.password.CompromisedPasswordDecision;
-import org.springframework.security.core.Authentication;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.authentication.password.CompromisedPasswordChecker;
+import org.springframework.security.authentication.password.CompromisedPasswordDecision;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -27,7 +28,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/auth")
@@ -37,43 +41,38 @@ public class AuthController {
     private final AuthenticationManager authenticationManager;
     private final CustomerRepository customerRepository;
     private final PasswordEncoder passwordEncoder;
+    private final CompromisedPasswordChecker compromisedPasswordChecker;
     private final JwtUtil jwtUtil;
 
     @PostMapping("/login")
-    public ResponseEntity<LoginResponseDto> apiLogin(@RequestBody LoginRequestDto loginRequestDto){
-
+    public ResponseEntity<LoginResponseDto> apiLogin(@RequestBody
+                                                     LoginRequestDto loginRequestDto) {
         try {
             Authentication authentication = authenticationManager.authenticate(new
                     UsernamePasswordAuthenticationToken(loginRequestDto.username(),
                     loginRequestDto.password()));
-
             var userDto = new UserDto();
-            var loggedInUser = (User) authentication.getPrincipal();
-            userDto.setName(loggedInUser.getUsername());
+            var loggedInUser = (Customer) authentication.getPrincipal();
+            BeanUtils.copyProperties(loggedInUser, userDto);
             String jwtToken = jwtUtil.generateJwtToken(authentication);
             return ResponseEntity.status(HttpStatus.OK)
                     .body(new LoginResponseDto(HttpStatus.OK.getReasonPhrase(),
-                            userDto , jwtToken));
+                            userDto, jwtToken));
         } catch (BadCredentialsException ex) {
-            ex.printStackTrace();
             return buildErrorResponse(HttpStatus.UNAUTHORIZED,
                     "Invalid username or password");
         } catch (AuthenticationException ex) {
-            ex.printStackTrace();
             return buildErrorResponse(HttpStatus.UNAUTHORIZED,
                     "Authentication failed");
         } catch (Exception ex) {
-            ex.printStackTrace();
             return buildErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR,
                     "An unexpected error occurred");
         }
-
     }
 
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@Valid @RequestBody RegisterRequestDto registerRequestDto) {
 
-        AnnotationNode compromisedPasswordChecker;
         CompromisedPasswordDecision decision = compromisedPasswordChecker.check(registerRequestDto.getPassword());
         if(decision.isCompromised()) {
             return ResponseEntity
@@ -110,5 +109,6 @@ public class AuthController {
                 .status(status)
                 .body(new LoginResponseDto(message, null, null));
     }
+
 
 }

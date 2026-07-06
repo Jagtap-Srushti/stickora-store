@@ -2,43 +2,33 @@ package com.srushti.stickora.entity;
 
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.stereotype.Component;
-
 import java.math.BigDecimal;
-import java.time.Instant;
 
-@Entity
-@Table(name="products")
-@AllArgsConstructor
-@NoArgsConstructor
-@Component
 @Getter
 @Setter
+@Entity
+@Table(name = "PRODUCTS")
 public class Product extends BaseEntity {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="product_id",nullable = false)
-    private Long productId;
+    @Column(name = "PRODUCT_ID", nullable = false)
+    private Long id;
 
-    @Column(name = "name",nullable = false)
+    @Column(name = "NAME", nullable = false, length = 250)
     private String name;
 
-    @Column(name = "description",nullable = false)
+    @Column(name = "DESCRIPTION", nullable = false, length = 500)
     private String description;
 
-    @Column(name = "price",nullable = false)
+    @Column(name = "PRICE", nullable = false, precision = 10, scale = 2)
     private BigDecimal price;
 
-    @Column(name = "popularity",nullable = false)
+    @Column(name = "POPULARITY", nullable = false)
     private Integer popularity;
 
-    @Column(name = "image_url")
+    @Column(name = "IMAGE_URL", length = 500)
     private String imageUrl;
-
 
 }

@@ -1,12 +1,12 @@
 package com.srushti.stickora.util;
 
 import com.srushti.stickora.constants.ApplicationConstants;
+import com.srushti.stickora.entity.Customer;
 import lombok.RequiredArgsConstructor;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.core.env.Environment;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
@@ -24,12 +24,16 @@ public class JwtUtil {
                 ApplicationConstants.JWT_SECRET_DEFAULT_VALUE);
 
         SecretKey secretKey = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
-        User fetchedUser = (User) authentication.getPrincipal();
-        jwt = Jwts.builder().issuer("Stickora").subject("JWT Token")
-                .claim("username", fetchedUser.getUsername())
+        Customer fetchedUser = (Customer) authentication.getPrincipal();
+
+        jwt = Jwts.builder()
+                .issuer("Stickora")
+                .subject("JWT Token")
+                .claim("email", fetchedUser.getEmail())
                 .issuedAt(new java.util.Date())
-                .expiration(new java.util.Date((new java.util.Date()).getTime() + 60 * 60 * 1000))
-                .signWith(secretKey).compact();
+                .expiration(new java.util.Date(System.currentTimeMillis() + 60 * 60 * 1000))
+                .signWith(secretKey)
+                .compact();
 
         return jwt;
     }
