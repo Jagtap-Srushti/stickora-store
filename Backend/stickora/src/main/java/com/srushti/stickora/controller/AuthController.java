@@ -5,6 +5,7 @@ import com.srushti.stickora.dto.LoginResponseDto;
 import com.srushti.stickora.dto.RegisterRequestDto;
 import com.srushti.stickora.dto.UserDto;
 import com.srushti.stickora.entity.Customer;
+import com.srushti.stickora.entity.Role;
 import com.srushti.stickora.repository.CustomerRepository;
 import com.srushti.stickora.util.JwtUtil;
 import jakarta.validation.Valid;
@@ -19,6 +20,7 @@ import org.springframework.security.authentication.password.CompromisedPasswordC
 import org.springframework.security.authentication.password.CompromisedPasswordDecision;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -28,10 +30,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/v1/auth")
@@ -54,6 +54,8 @@ public class AuthController {
             var userDto = new UserDto();
             var loggedInUser = (Customer) authentication.getPrincipal();
             BeanUtils.copyProperties(loggedInUser, userDto);
+            userDto.setRoles(authentication.getAuthorities().stream().map(
+                    GrantedAuthority::getAuthority).collect(Collectors.joining(",")));
             String jwtToken = jwtUtil.generateJwtToken(authentication);
             return ResponseEntity.status(HttpStatus.OK)
                     .body(new LoginResponseDto(HttpStatus.OK.getReasonPhrase(),
@@ -97,6 +99,10 @@ public class AuthController {
         Customer customer = new Customer();
         BeanUtils.copyProperties(registerRequestDto, customer);
         customer.setPasswordHash(passwordEncoder.encode(registerRequestDto.getPassword()));
+        Role role=new Role();
+        role.setName("ROLE_USER");
+        customer.setRoles(Set.of(role));
+
         customerRepository.save(customer);
         return ResponseEntity
                 .status(HttpStatus.CREATED)

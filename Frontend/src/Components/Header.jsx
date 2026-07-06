@@ -17,7 +17,6 @@ export default function Header() {
     return localStorage.getItem("theme") === "dark" ? "dark" : "light";
   });
 
-  const isAdmin = true;
   const [isUserMenuOpen, setUserMenuOpen] = useState(false);
   const [isAdminMenuOpen, setAdminMenuOpen] = useState(false);
   const location = useLocation();
@@ -29,7 +28,7 @@ export default function Header() {
 
   const { totalQuantity } = useCart();
   const { isAuthenticated, user, logout } = useAuth();
-
+  const isAdmin = user?.roles?.includes("ROLE_ADMIN");
   useEffect(() => {
     if (theme === "dark") {
       document.documentElement.classList.add("dark");
@@ -73,7 +72,7 @@ export default function Header() {
       <div className="flex items-center justify-between mx-auto max-w-[1152px] px-6 py-4">
         <Link to="/" className={navLinkClass}>
           <FontAwesomeIcon icon={faTags} className="h-8 w-8" />
-          <span className="font-bold">Eazy Stickers</span>
+          <span className="font-bold">Stickora</span>
         </Link>
         <nav className="flex items-center py-2 z-10">
           <button
