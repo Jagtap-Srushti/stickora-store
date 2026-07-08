@@ -1,9 +1,6 @@
 package com.srushti.stickora.controller;
 
-import com.srushti.stickora.dto.LoginRequestDto;
-import com.srushti.stickora.dto.LoginResponseDto;
-import com.srushti.stickora.dto.RegisterRequestDto;
-import com.srushti.stickora.dto.UserDto;
+import com.srushti.stickora.dto.*;
 import com.srushti.stickora.entity.Customer;
 import com.srushti.stickora.entity.Role;
 import com.srushti.stickora.repository.CustomerRepository;
@@ -56,6 +53,13 @@ public class AuthController {
             BeanUtils.copyProperties(loggedInUser, userDto);
             userDto.setRoles(authentication.getAuthorities().stream().map(
                     GrantedAuthority::getAuthority).collect(Collectors.joining(",")));
+
+            if (loggedInUser.getAddress() != null) {
+                AddressDto addressDto = new AddressDto();
+                BeanUtils.copyProperties(loggedInUser.getAddress(), addressDto);
+                userDto.setAddress(addressDto);
+            }
+
             String jwtToken = jwtUtil.generateJwtToken(authentication);
             return ResponseEntity.status(HttpStatus.OK)
                     .body(new LoginResponseDto(HttpStatus.OK.getReasonPhrase(),

@@ -1,6 +1,6 @@
-import {createContext,useState,useEffect,useContext,useReducer,} from "react";
+import { createContext, useEffect, useContext, useReducer } from "react";
 
-
+// STEP 1
 export const CartContext = createContext();
 
 export const useCart = () => useContext(CartContext);
@@ -48,8 +48,6 @@ export const CartProvider = ({ children }) => {
   })();
 
   const [cart, dispatch] = useReducer(cartReducer, initialCartState);
- 
-  // });
 
   // Save cart to localStorage whenever it changes
   useEffect(() => {
@@ -59,7 +57,6 @@ export const CartProvider = ({ children }) => {
       console.error("Failed to save cart to localStorage:", error);
     }
   }, [cart]);
-
 
   const addToCart = (product, quantity) => {
     dispatch({ type: ADD_TO_CART, payload: { product, quantity } });
@@ -76,9 +73,22 @@ export const CartProvider = ({ children }) => {
   // Calculate total quantity
   const totalQuantity = cart.reduce((acc, item) => acc + item.quantity, 0);
 
+  // Calculate total price
+  const totalPrice = cart.reduce(
+    (acc, item) => acc + item.quantity * item.price,
+    0
+  );
+
   return (
     <CartContext.Provider
-      value={{ cart, addToCart, removeFromCart, clearCart, totalQuantity }}
+      value={{
+        cart,
+        addToCart,
+        removeFromCart,
+        clearCart,
+        totalQuantity,
+        totalPrice,
+      }}
     >
       {children}
     </CartContext.Provider>

@@ -1,5 +1,6 @@
 package com.srushti.stickora.service.impl;
 
+import com.srushti.stickora.dto.AddressDto;
 import com.srushti.stickora.dto.ProfileRequestDto;
 import com.srushti.stickora.dto.ProfileResponseDto;
 import com.srushti.stickora.entity.Address;
@@ -47,7 +48,7 @@ public class ProfileServiceImpl implements IProfileService {
         return profileResponseDto;
     }
 
-    private Customer getAuthenticatedCustomer() {
+    Customer getAuthenticatedCustomer() {
         Authentication authentication =SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
         return customerRepository.findByEmail(email).
@@ -58,12 +59,11 @@ public class ProfileServiceImpl implements IProfileService {
         ProfileResponseDto profileResponseDto = new ProfileResponseDto();
         BeanUtils.copyProperties(customer, profileResponseDto);
         if (customer.getAddress() != null) {
-            profileResponseDto.setStreet(customer.getAddress().getStreet());
-            profileResponseDto.setCity(customer.getAddress().getCity());
-            profileResponseDto.setState(customer.getAddress().getState());
-            profileResponseDto.setPostalCode(customer.getAddress().getPostalCode());
-            profileResponseDto.setCountry(customer.getAddress().getCountry());
+            AddressDto addressDto = new AddressDto();
+            BeanUtils.copyProperties(customer.getAddress(), addressDto);
+            profileResponseDto.setAddress(addressDto);
         }
+
         return profileResponseDto;
     }
 }
