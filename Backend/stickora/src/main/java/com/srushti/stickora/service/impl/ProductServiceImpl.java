@@ -23,9 +23,9 @@ public class ProductServiceImpl implements IProductService {
                 .stream().map(this::transformToDto).collect(Collectors.toList());
     }
 
-    private ProductDto transformToDto(Product product){
-        ProductDto productDto=new ProductDto();
-        BeanUtils.copyProperties(product,productDto);
+    private ProductDto transformToDto(Product product) {
+        ProductDto productDto = new ProductDto();
+        BeanUtils.copyProperties(product, productDto);
         return productDto;
     }
 }

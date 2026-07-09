@@ -39,8 +39,7 @@ export default function CheckoutForm() {
     "border-primary dark:border-light focus:ring-dark dark:focus:ring-lighter";
 
   const getClassForElement = (field) =>
-    `${fieldBaseClass} ${
-      elementErrors[field] ? fieldErrorClass : fieldValidClass
+    `${fieldBaseClass} ${elementErrors[field] ? fieldErrorClass : fieldValidClass
     }`;
 
   const elementOptions = {
