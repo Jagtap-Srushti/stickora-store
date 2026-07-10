@@ -18,8 +18,8 @@ import CheckoutForm from './Components/CheckoutForm.jsx'
 import ProtectedRoute from './Components/ProtectedRoute.jsx'
 import Orders, { ordersLoader } from './Components/Orders.jsx'
 import Profile, { profileLoader, profileAction } from './Components/Profile.jsx'
-import AdminOrders from './Components/admin/AdminOrders.jsx'
-import Messages from './Components/admin/Messages.jsx'
+import AdminOrders, { adminOrdersLoader } from './Components/admin/AdminOrders.jsx'
+import Messages, { messagesLoader } from './Components/admin/Messages.jsx'
 import Register, { registerAction } from './Components/Register.jsx'
 import { loadStripe } from "@stripe/stripe-js"
 import { Elements } from "@stripe/react-stripe-js";
@@ -52,8 +52,8 @@ const routeDefinitions = createRoutesFromElements(
         }}
       />
       <Route path="/orders" element={<Orders />} loader={ordersLoader}/>
-      <Route path="/admin/orders" element={<AdminOrders />} />
-      <Route path="/admin/messages" element={<Messages />} />
+      <Route path="/admin/orders" element={<AdminOrders />}  loader={adminOrdersLoader}/>
+      <Route path="/admin/messages" element={<Messages />} loader={messagesLoader}/>
     </Route>
   </Route>
 );

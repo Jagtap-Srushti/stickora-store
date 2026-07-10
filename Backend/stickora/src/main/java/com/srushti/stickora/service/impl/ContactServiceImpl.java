@@ -4,7 +4,6 @@ import com.srushti.stickora.constants.ApplicationConstants;
 import com.srushti.stickora.dto.ContactRequestDto;
 import com.srushti.stickora.dto.ContactResponseDto;
 import com.srushti.stickora.entity.Contact;
-import com.srushti.stickora.entity.Order;
 import com.srushti.stickora.exception.ResourceNotFoundException;
 import com.srushti.stickora.repository.ContactRepository;
 import com.srushti.stickora.service.IContactService;
