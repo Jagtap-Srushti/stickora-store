@@ -1,14 +1,63 @@
-@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@300;400;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@300;400;500;600;700&display=swap');
 
 @import "tailwindcss";
 @custom-variant dark (&:where(.dark, .dark *));
 
-@theme{
-    --font-primary:"Josefin Sans";
-    --color-primary:#5B21B6;
-    --color-dark:#4C1D95;
-    --color-lighter:#F5F3FF;
-    --color-light:#DDD6FE;
-    --color-normalbg: #f3f4f6;
-    --color-darkbg: #1e2939;
+@theme {
+    /* Core Brand Typography Configuration */
+    --font-primary: "Josefin Sans", sans-serif;
+
+    /* Expanded Color Design System Tokens */
+    --color-primary: #5B21B6;
+    /* Deep Violet - Primary Brand Color */
+    --color-primary-hover: #6D28D9;
+    /* Bright Violet for dynamic interactive states */
+    --color-dark: #4C1D95;
+    /* Deepest Purple for emphasized typography overlays */
+    --color-light: #DDD6FE;
+    /* Soft Lavendar border line / text tone */
+    --color-lighter: #F5F3FF;
+    /* Ethereal Violet glow tint background drop */
+
+    /* Precision Semantic Surface Layout Layers */
+    --color-normalbg: #F9FAFB;
+    /* Pure neutral light application background canvas */
+    --color-cardbg-light: #FFFFFF;
+    /* Elevated pure white card layer components */
+
+    --color-darkbg: #0F172A;
+    /* High-end rich Slate-900 absolute dark chassis */
+    --color-cardbg-dark: #1E293B;
+    /* Matte Slate-800 premium dark containers */
+    --color-border-dark: #334155;
+    /* Subdued Slate-700 structural separation strokes */
+
+    /* Custom Smooth Elevated Shadows */
+    --shadow-premium: 0 4px 20px -2px rgba(91, 33, 182, 0.06), 0 2px 8px -1px rgba(91, 33, 182, 0.04);
+    --shadow-premium-hover: 0 20px 32px -4px rgba(91, 33, 182, 0.12), 0 8px 16px -2px rgba(91, 33, 182, 0.06);
+
+    /* Tailored Fluid Transition Parameters */
+    --animate-ui-pop: ui-pop 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+
+    /* Single, clean fluid keyframe configuration */
+    @keyframes ui-pop {
+        0% {
+            transform: scale(0.3);
+            opacity: 0;
+        }
+        70% {
+            transform: scale(1.15);
+        }
+        100% {
+            transform: scale(1);
+            opacity: 1;
+        }
+    }
+}
+
+/* Base Utility Layers to Guarantee Global Uniform Typography Layouts */
+@layer base {
+    body {
+        @apply font-primary bg-normalbg text-gray-800 dark:bg-darkbg dark:text-gray-100 antialiased selection:bg-light/50 transition-colors duration-300;
+    }
 }
