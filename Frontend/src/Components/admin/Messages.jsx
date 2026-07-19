@@ -8,78 +8,61 @@ export default function Messages() {
   const messages = useLoaderData();
   const revalidator = useRevalidator();
 
-  /**
-   * Handle Order Cancellation
-   */
   const handleCloseMessage = async (contactId) => {
     try {
       await apiClient.patch(`/admin/messages/${contactId}/close`);
       toast.success("Message closed");
-      revalidator.revalidate(); // 🔁 Re-run loader
+      revalidator.revalidate();
     } catch (error) {
       toast.error("Failed to close message");
     }
   };
 
   return (
-    <div className="min-h-[852px] container mx-auto px-6 py-12 font-primary dark:bg-darkbg">
+    <div className="container mx-auto px-6 py-12 max-w-5xl font-primary">
+      <div className="text-center mb-12">
+        <PageTitle title="Admin Contact Messages" />
+      </div>
+
       {messages.length === 0 ? (
-        <p className="text-center text-2xl text-primary dark:text-lighter">
-          No open messages found.
-        </p>
+        <div className="text-center py-20 border-2 border-dashed border-gray-200 rounded-3xl">
+          <p className="text-gray-500 font-medium">No open messages found.</p>
+        </div>
       ) : (
-        <div className="overflow-x-auto">
-          <PageTitle title="Admin Contact Messages" />
-          <table className="w-full mt-4 table-fixed border-collapse border border-gray-200 dark:border-gray-700">
-            <thead>
-              <tr className="bg-primary dark:bg-light text-lighter dark:text-primary">
-                <th className="w-1/6 border border-gray-300 dark:border-gray-600 px-4 py-2 text-left">
-                  Name
-                </th>
-                <th className="w-1/6 border border-gray-300 dark:border-gray-600 px-4 py-2 text-left">
-                  Email
-                </th>
-                <th className="w-1/6 border border-gray-300 dark:border-gray-600 px-4 py-2 text-left">
-                  Mobile #
-                </th>
-                <th className="w-2/5 border border-gray-300 dark:border-gray-600 px-4 py-2 text-left">
-                  Message
-                </th>
-                <th className="w-1/6 border border-gray-300 dark:border-gray-600 px-4 py-2 text-left">
-                  Action
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {messages.map((message) => (
-                <tr
-                  key={message.contactId}
-                  className=" bg-white dark:bg-gray-600 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-800 dark:text-lighter"
-                >
-                  <td className="border px-4 py-2 break-words">
-                    {message.name}
-                  </td>
-                  <td className="border px-4 py-2 break-words">
-                    {message.email}
-                  </td>
-                  <td className="border px-4 py-2 break-words">
-                    {message.mobileNumber}
-                  </td>
-                  <td className="border px-4 py-2 break-words max-w-[300px] overflow-auto">
-                    {message.message}
-                  </td>
-                  <td className="border px-4 py-2 text-center">
-                    <button
-                      onClick={() => handleCloseMessage(message.contactId)}
-                      className="bg-red-500 text-white px-4 py-1 rounded-md hover:bg-red-600 transition"
-                    >
-                      Close
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+        <div className="grid gap-6">
+          {messages.map((message) => (
+            <div
+              key={message.contactId}
+              className="bg-white dark:bg-gray-800 p-6 rounded-3xl shadow-sm border border-gray-100 dark:border-gray-700 transition-all hover:shadow-md"
+            >
+              <div className="flex flex-col md:flex-row md:items-start justify-between gap-4">
+                <div className="flex-1">
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold">
+                      {message.name.charAt(0).toUpperCase()}
+                    </div>
+                    <div>
+                      <h3 className="font-bold text-lg text-dark dark:text-white">{message.name}</h3>
+                      <p className="text-sm text-gray-500">{message.email} • {message.mobileNumber}</p>
+                    </div>
+                  </div>
+                  
+                  <div className="bg-gray-50 dark:bg-gray-900/50 p-4 rounded-2xl mt-2">
+                    <p className="text-gray-700 dark:text-gray-300 italic">"{message.message}"</p>
+                  </div>
+                </div>
+
+                <div className="flex md:flex-col gap-2 justify-center">
+                  <button
+                    onClick={() => handleCloseMessage(message.contactId)}
+                    className="px-6 py-2 bg-red-50 hover:bg-red-100 text-red-600 font-bold rounded-xl transition active:scale-95"
+                  >
+                    Close
+                  </button>
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
       )}
     </div>

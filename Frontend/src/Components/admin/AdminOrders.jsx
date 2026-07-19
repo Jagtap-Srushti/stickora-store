@@ -17,114 +17,93 @@ export default function AdminOrders() {
     });
   }
 
-  /**
-   * Handle Order Confirm
-   */
   const handleConfirm = async (orderId) => {
     try {
       await apiClient.patch(`/admin/orders/${orderId}/confirm`);
       toast.success("Order confirmed.");
-      revalidator.revalidate(); // 🔁 Re-run loader
+      revalidator.revalidate();
     } catch (error) {
       toast.error("Failed to confirm order.");
     }
   };
 
-  /**
-   * Handle Order Cancellation
-   */
   const handleCancel = async (orderId) => {
     try {
       await apiClient.patch(`/admin/orders/${orderId}/cancel`);
       toast.success("Order cancelled.");
-      revalidator.revalidate(); // 🔁 Re-run loader
+      revalidator.revalidate();
     } catch (error) {
       toast.error("Failed to cancel order.");
     }
   };
 
   return (
-    <div className="min-h-[852px] container mx-auto px-6 py-12 font-primary dark:bg-darkbg">
+    <div className="min-h-screen container mx-auto px-6 py-12 font-primary bg-gray-50 dark:bg-darkbg">
       {orders.length === 0 ? (
-        <p className="text-center text-2xl  text-primary dark:text-lighter">
+        <p className="text-center text-2xl text-primary dark:text-lighter">
           No orders found.
         </p>
       ) : (
-        <div className="space-y-6 mt-4">
+        <div className="space-y-8 mt-4 max-w-4xl mx-auto">
           <PageTitle title="Admin Orders Management" />
+          
           {orders.map((order) => (
             <div
               key={order.orderId}
-              className="bg-white dark:bg-gray-700 shadow-md rounded-md p-6"
+              className="bg-white dark:bg-gray-800 shadow-sm border border-gray-100 dark:border-gray-700 rounded-2xl p-8 transition-all hover:shadow-md"
             >
-              {/* Top Row: Order Info + Buttons */}
-              <div className="flex flex-wrap items-center justify-between mb-4">
+              {/* Header Info */}
+              <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
                 <div>
-                  <h2 className="text-xl font-semibold text-primary dark:text-lighter">
+                  <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
                     Order #{order.orderId}
                   </h2>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">
-                    Status:{" "}
-                    <span className="font-medium text-gray-800 dark:text-lighter">
-                      {order.status}
-                    </span>
-                  </p>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">
-                    Total Price:{" "}
-                    <span className="font-medium text-gray-800 dark:text-gray-200">
-                      ${order.totalPrice}
-                    </span>
-                  </p>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">
-                    Date:{" "}
-                    <span className="font-medium text-gray-800 dark:text-gray-200">
-                      {formatDate(order.createdAt)}
-                    </span>
-                  </p>
+                  <div className="flex gap-4 mt-2 text-sm text-gray-500 dark:text-gray-400">
+                    <p>Status: <span className="font-semibold text-primary dark:text-lighter">{order.status}</span></p>
+                    <p>Date: {formatDate(order.createdAt)}</p>
+                  </div>
                 </div>
 
-                {/* Action Buttons */}
-                <div className="flex space-x-4 mt-4 lg:mt-0">
+                {/* Actions */}
+                <div className="flex gap-3">
                   <button
                     onClick={() => handleConfirm(order.orderId)}
-                    className="px-6 py-2 text-white dark:text-dark text-md rounded-md transition duration-200 bg-primary dark:bg-light hover:bg-dark dark:hover:bg-lighter"
+                    className="px-5 py-2 text-sm font-semibold text-white rounded-lg bg-primary hover:bg-opacity-90 transition"
                   >
                     Confirm
                   </button>
                   <button
                     onClick={() => handleCancel(order.orderId)}
-                    className="px-6 py-2 text-white text-md rounded-md transition duration-200 bg-red-500 hover:bg-red-600"
+                    className="px-5 py-2 text-sm font-semibold text-gray-700 dark:text-gray-200 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-lg transition"
                   >
                     Cancel
                   </button>
                 </div>
               </div>
 
-              {/* Order Items */}
-              <div className="space-y-4 border-t pt-4">
+              {/* Items List */}
+              <div className="space-y-4 border-t border-gray-100 dark:border-gray-700 pt-6">
                 {order.items.map((item, index) => (
-                  <div
-                    key={index}
-                    className="flex items-center border-b pb-4 last:border-b-0"
-                  >
+                  <div key={index} className="flex items-center gap-4">
                     <img
                       src={item.imageUrl}
                       alt={item.productName}
-                      className="w-16 h-16 object-cover rounded-md mr-4"
+                      className="w-16 h-16 object-cover rounded-xl border border-gray-100"
                     />
-                    <div>
-                      <h3 className="text-md font-medium text-gray-800 dark:text-gray-200">
-                        {item.productName}
-                      </h3>
-                      <p className="text-sm text-gray-600 dark:text-gray-400">
-                        Quantity: {item.quantity}
-                      </p>
-                      <p className="text-sm text-gray-600 dark:text-gray-400">
-                        Price: ${item.price}
-                      </p>
+                    <div className="flex-grow">
+                      <h3 className="font-medium text-gray-800 dark:text-gray-200">{item.productName}</h3>
+                      <p className="text-sm text-gray-500">Qty: {item.quantity}</p>
                     </div>
+                    <p className="font-semibold text-gray-900 dark:text-gray-100">${item.price}</p>
                   </div>
                 ))}
+              </div>
+
+              {/* Footer */}
+              <div className="mt-6 pt-6 border-t border-gray-100 dark:border-gray-700 flex justify-end">
+                <p className="text-lg font-bold text-gray-900 dark:text-white">
+                  Total: ${order.totalPrice}
+                </p>
               </div>
             </div>
           ))}

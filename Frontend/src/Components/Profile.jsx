@@ -1,14 +1,6 @@
 import React, { useEffect, useState } from "react";
 import apiClient from "../api/apiClient";
-import {
-  Form,
-  useLoaderData,
-  useActionData,
-  useNavigation,
-  useNavigate,
-  replace,
-} from "react-router-dom";
-import PageTitle from "./PageTitle";
+import { Form, useLoaderData, useActionData, useNavigation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useAuth } from "../store/auth-context";
 
@@ -27,284 +19,96 @@ export default function Profile() {
       if (actionData.profileData.emailUpdated) {
         sessionStorage.setItem("skipRedirectPath", "true");
         logout();
-        toast.success(
-          "Logged out successfully! Login again with updated email"
-        );
+        toast.success("Logged out successfully! Login again with updated email");
         navigate("/login");
       } else {
         toast.success("Your Profile details are saved successfully!");
         setProfileData(actionData.profileData);
-        // Update the user object in auth context and localStorage
         if (actionData.profileData) {
-          const updatedUser = {
-            ...profileData, // previous
-            ...actionData.profileData, // updated fields
-          };
-          // Update in context
+          const updatedUser = { ...profileData, ...actionData.profileData };
           loginSuccess(localStorage.getItem("jwtToken"), updatedUser);
         }
       }
     }
   }, [actionData]);
 
-  const labelStyle =
-    "block text-lg font-semibold text-primary dark:text-light mb-2";
-  const h2Style =
-    "block text-2xl font-semibold text-primary dark:text-light mb-2";
-  const textFieldStyle =
-    "w-full px-4 py-2 text-base border rounded-md transition border-primary dark:border-light focus:ring focus:ring-dark dark:focus:ring-lighter focus:outline-none text-gray-800 dark:text-lighter bg-white dark:bg-gray-600 placeholder-gray-400 dark:placeholder-gray-300";
+  // Helper to handle nested address updates
+  const handleAddressChange = (e) => {
+    const { name, value } = e.target;
+    setProfileData(prev => ({
+      ...prev,
+      address: { ...prev.address, [name]: value }
+    }));
+  };
+
+  const cardStyle = "bg-white dark:bg-cardbg-dark p-8 rounded-2xl shadow-sm border border-light/20 dark:border-border-dark";
+  const sectionTitleStyle = "text-xl font-bold text-gray-900 dark:text-white mb-6 flex items-center gap-2";
+  const inputContainerStyle = "space-y-1.5";
+  const labelStyle = "text-sm font-semibold text-gray-600 dark:text-gray-400 ml-1";
+  const textFieldStyle = "w-full px-4 py-3 rounded-xl border border-light/60 dark:border-border-dark bg-lighter/30 dark:bg-darkbg focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all";
 
   return (
-    <div className="max-w-[1152px] min-h-[852px] mx-auto px-6 py-8 font-primary bg-normalbg dark:bg-darkbg">
-      <PageTitle title="My Profile" />
+    <div className="max-w-4xl mx-auto px-6 py-12">
+      <div className="mb-8">
+        <h1 className="text-3xl font-extrabold text-dark dark:text-white">Account Settings</h1>
+      </div>
 
-      <Form method="PUT" className="space-y-6 max-w-[768px] mx-auto">
-        <div>
-          <h2 className={h2Style}>Personal Details</h2>
-          <label htmlFor="name" className={labelStyle}>
-            Name
-          </label>
-          <input
-            id="name"
-            name="name"
-            type="text"
-            placeholder="Your Name"
-            className={textFieldStyle}
-            value={profileData.name}
-            onChange={(e) =>
-              setProfileData((prev) => ({ ...prev, name: e.target.value }))
-            }
-            required
-            minLength={5}
-            maxLength={30}
-          />
-          {actionData?.errors?.name && (
-            <p className="text-red-500 text-sm mt-1">
-              {actionData.errors.name}
-            </p>
-          )}
-        </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-          <div>
-            <label htmlFor="email" className={labelStyle}>
-              Email
-            </label>
-            <input
-              id="email"
-              name="email"
-              type="email"
-              placeholder="Your Email"
-              value={profileData.email}
-              onChange={(e) =>
-                setProfileData((prev) => ({ ...prev, email: e.target.value }))
-              }
-              className={textFieldStyle}
-              required
-            />
-            {actionData?.errors?.email && (
-              <p className="text-red-500 text-sm mt-1">
-                {actionData.errors.email}
-              </p>
-            )}
-          </div>
-
-          <div>
-            <label htmlFor="mobileNumber" className={labelStyle}>
-              Mobile Number
-            </label>
-            <input
-              id="mobileNumber"
-              name="mobileNumber"
-              type="tel"
-              required
-              pattern="^\d{10}$"
-              title="Mobile number must be exactly 10 digits"
-              value={profileData.mobileNumber}
-              onChange={(e) =>
-                setProfileData((prev) => ({
-                  ...prev,
-                  mobileNumber: e.target.value,
-                }))
-              }
-              placeholder="Your Mobile Number"
-              className={textFieldStyle}
-            />
-            {actionData?.errors?.mobileNumber && (
-              <p className="text-red-500 text-sm mt-1">
-                {actionData.errors.mobileNumber}
-              </p>
-            )}
+      <Form method="PUT" className="space-y-8">
+        <div className={cardStyle}>
+          <h2 className={sectionTitleStyle}>👤 Personal Details</h2>
+          <div className="space-y-5">
+            <div className={inputContainerStyle}>
+              <label className={labelStyle}>Full Name</label>
+              <input name="name" className={textFieldStyle} value={profileData.name} onChange={(e) => setProfileData({...profileData, name: e.target.value})} required />
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+              <div className={inputContainerStyle}>
+                <label className={labelStyle}>Email Address</label>
+                <input name="email" className={textFieldStyle} value={profileData.email} onChange={(e) => setProfileData({...profileData, email: e.target.value})} required />
+              </div>
+              <div className={inputContainerStyle}>
+                <label className={labelStyle}>Mobile Number</label>
+                <input name="mobileNumber" className={textFieldStyle} value={profileData.mobileNumber} onChange={(e) => setProfileData({...profileData, mobileNumber: e.target.value})} required />
+              </div>
+            </div>
           </div>
         </div>
 
-        <div>
-          <h2 className={h2Style}>Address Details</h2>
-          <label htmlFor="street" className={labelStyle}>
-            Street
-          </label>
-          <input
-            id="street"
-            name="street"
-            type="text"
-            placeholder="Street details"
-            value={profileData.address?.street}
-            onChange={(e) =>
-              setProfileData((prev) => ({
-                ...prev,
-                address: {
-                  ...prev.address,
-                  street: e.target.value,
-                },
-              }))
-            }
-            className={textFieldStyle}
-            required
-            minLength={5}
-            maxLength={30}
-          />
-          {actionData?.errors?.street && (
-            <p className="text-red-500 text-sm mt-1">
-              {actionData.errors.street}
-            </p>
-          )}
-        </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-          <div>
-            <label htmlFor="city" className={labelStyle}>
-              City
-            </label>
-            <input
-              id="city"
-              name="city"
-              type="text"
-              placeholder="Your City"
-              value={profileData.address?.city}
-              onChange={(e) =>
-                setProfileData((prev) => ({
-                  ...prev,
-                  address: {
-                    ...prev.address,
-                    city: e.target.value,
-                  },
-                }))
-              }
-              className={textFieldStyle}
-              required
-              minLength={3}
-              maxLength={30}
-            />
-            {actionData?.errors?.city && (
-              <p className="text-red-500 text-sm mt-1">
-                {actionData.errors.city}
-              </p>
-            )}
-          </div>
-
-          <div>
-            <label htmlFor="state" className={labelStyle}>
-              State
-            </label>
-            <input
-              id="state"
-              name="state"
-              type="text"
-              required
-              minLength={2}
-              maxLength={30}
-              placeholder="Your State"
-              value={profileData.address?.state}
-              onChange={(e) =>
-                setProfileData((prev) => ({
-                  ...prev,
-                  address: {
-                    ...prev.address,
-                    state: e.target.value,
-                  },
-                }))
-              }
-              className={textFieldStyle}
-            />
-            {actionData?.errors?.state && (
-              <p className="text-red-500 text-sm mt-1">
-                {actionData.errors.state}
-              </p>
-            )}
+        <div className={cardStyle}>
+          <h2 className={sectionTitleStyle}>📍 Address Details</h2>
+          <div className="space-y-5">
+            <div className={inputContainerStyle}>
+              <label className={labelStyle}>Street Address</label>
+              <input name="street" className={textFieldStyle} value={profileData.address?.street || ""} onChange={handleAddressChange} required />
+            </div>
+            
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-5">
+              <div className={inputContainerStyle}>
+                <label className={labelStyle}>City</label>
+                <input name="city" className={textFieldStyle} value={profileData.address?.city || ""} onChange={handleAddressChange} required />
+              </div>
+              <div className={inputContainerStyle}>
+                <label className={labelStyle}>State</label>
+                <input name="state" className={textFieldStyle} value={profileData.address?.state || ""} onChange={handleAddressChange} required />
+              </div>
+              <div className={inputContainerStyle}>
+                <label className={labelStyle}>Postal Code</label>
+                <input name="postalCode" className={textFieldStyle} value={profileData.address?.postalCode || ""} onChange={handleAddressChange} required />
+              </div>
+            </div>
+            {/* Added missing country field */}
+            <div className={inputContainerStyle}>
+              <label className={labelStyle}>Country</label>
+              <input name="country" className={textFieldStyle} value={profileData.address?.country || ""} onChange={handleAddressChange} required />
+            </div>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-          <div>
-            <label htmlFor="postalCode" className={labelStyle}>
-              Postal Code
-            </label>
-            <input
-              id="postalCode"
-              name="postalCode"
-              type="text"
-              placeholder="Your Postal Code"
-              value={profileData.address?.postalCode}
-              onChange={(e) =>
-                setProfileData((prev) => ({
-                  ...prev,
-                  address: {
-                    ...prev.address,
-                    postalCode: e.target.value,
-                  },
-                }))
-              }
-              className={textFieldStyle}
-              required
-              pattern="^\d{5}$"
-              title="Postal code must be exactly 5 digits"
-            />
-            {actionData?.errors?.postalCode && (
-              <p className="text-red-500 text-sm mt-1">
-                {actionData.errors.postalCode}
-              </p>
-            )}
-          </div>
-
-          <div>
-            <label htmlFor="country" className={labelStyle}>
-              Country
-            </label>
-            <input
-              id="country"
-              name="country"
-              type="text"
-              required
-              minLength={2}
-              maxLength={2}
-              placeholder="Your Country"
-              value={profileData.address?.country}
-              onChange={(e) =>
-                setProfileData((prev) => ({
-                  ...prev,
-                  address: {
-                    ...prev.address,
-                    country: e.target.value,
-                  },
-                }))
-              }
-              className={textFieldStyle}
-            />
-            {actionData?.errors?.country && (
-              <p className="text-red-500 text-sm mt-1">
-                {actionData.errors.country}
-              </p>
-            )}
-          </div>
-        </div>
-
-        <div className="text-center">
-          <button
-            type="submit"
-            disabled={isSubmitting}
-            className="px-6 py-2 mt-8 text-white dark:text-black text-xl rounded-md transition duration-200 bg-primary dark:bg-light hover:bg-dark dark:hover:bg-lighter"
-          >
-            {isSubmitting ? "Saving..." : "Save"}
+        <div className="flex justify-end gap-4">
+          <button type="button" onClick={() => navigate(-1)} className="px-6 py-2.5 rounded-xl text-gray-600 hover:bg-gray-100 dark:hover:bg-gray-800 transition">Cancel</button>
+          <button type="submit" disabled={isSubmitting} className="px-8 py-2.5 bg-primary hover:bg-primary-hover text-white rounded-xl font-bold shadow-lg shadow-primary/20 transition-all active:scale-95">
+            {isSubmitting ? "Saving..." : "Save Changes"}
           </button>
         </div>
       </Form>
