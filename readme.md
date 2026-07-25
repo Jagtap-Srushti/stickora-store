@@ -29,9 +29,12 @@
 * **Responsive UI:** Fully optimized layout across mobile, tablet, and desktop devices.
 
 ### 🛠️ Administrator Features
-* **Admin Dashboard:** Secure, role-restricted management portal (`ROLE_ADMIN`).
-* **Product Catalog Management:** Perform full CRUD operations (Add, Update, Delete products).
-* **Inventory Oversight:** Monitor active inventory levels and manage store listings seamlessly.
+
+- **Full User Access:** Inherits all standard user functionalities.
+- **Secure Admin Dashboard:** Role-based access restricted to administrators (`ROLE_ADMIN`).
+- **Order Monitoring:** View and manage all customer orders.
+- **Customer Inquiries:** Review messages submitted through the Contact Us page.
+- **Inventory Management:** Maintain product availability and store listings.
 
 ---
 
@@ -80,7 +83,10 @@ Save it to docs/architecture.png and reference it below.
 -->
  
 <div align="center">
-  <img src="docs/architecture.png" alt="Stickora System Architecture" width="800"/>
+  <img src="Frontend/src/assets/screenshot/architecture.svg"
+       alt="Stickora System Architecture"
+       width="600" height="700"
+    />
 </div>
 **Request flow :**
  
@@ -96,4 +102,186 @@ flowchart LR
  
 ---
 
+## ⚙️ Installation & Setup
 
+Follow these steps to run the Stickora project locally.
+
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/Jagtap-Srushti/stickora-store.git
+cd stickora-store
+```
+
+---
+
+### 2. Backend Setup
+
+Navigate to the backend directory:
+
+```bash
+cd Backend/stickora
+```
+
+Create a `.env` file (or configure your environment variables) and add the following:
+
+```properties
+DB_URL=your_postgresql_database_url
+DB_USERNAME=your_database_username
+DB_PASSWORD=your_database_password
+
+JWT_SECRET=your_jwt_secret_key
+
+STRIPE_API_KEY=your_stripe_secret_key
+
+FRONTEND_URL=http://localhost:5173
+```
+
+Run the backend:
+
+```bash
+./mvnw spring-boot:run
+```
+
+The backend will start at:
+
+```
+http://localhost:8080
+```
+
+---
+
+### 3. Frontend Setup
+
+Navigate to the frontend directory:
+
+```bash
+cd Frontend
+```
+
+Install dependencies:
+
+```bash
+npm install
+```
+
+Create a `.env` file inside the `Frontend` directory and add:
+
+```properties
+VITE_API_BASE_URL=http://localhost:8080
+VITE_STRIPE_PUBLISHABLE_KEY=your_stripe_publishable_key
+```
+
+Start the development server:
+
+```bash
+npm run dev
+```
+
+The frontend will be available at:
+
+```
+http://localhost:5173
+```
+
+---
+
+## 🔑 Environment Variables
+
+### Backend (.env)
+
+| Variable | Description |
+|----------|-------------|
+| `DB_URL` | PostgreSQL database connection URL |
+| `DB_USERNAME` | PostgreSQL username |
+| `DB_PASSWORD` | PostgreSQL password |
+| `JWT_SECRET` | Secret key used to sign JWT tokens |
+| `STRIPE_API_KEY` | Stripe Secret API Key |
+| `FRONTEND_URL` | Frontend application URL |
+
+Example:
+
+```properties
+DB_URL=jdbc:postgresql://localhost:5432/stickora
+DB_USERNAME=postgres
+DB_PASSWORD=your_password
+JWT_SECRET=your_secret_key
+STRIPE_API_KEY=sk_test_xxxxxxxxxxxxxxxxx
+FRONTEND_URL=http://localhost:5173
+```
+
+---
+
+### Frontend (.env)
+
+| Variable | Description |
+|----------|-------------|
+| `VITE_API_BASE_URL` | Spring Boot backend API URL |
+| `VITE_STRIPE_PUBLISHABLE_KEY` | Stripe Publishable Key |
+
+Example:
+
+```properties
+VITE_API_BASE_URL=http://localhost:8080
+VITE_STRIPE_PUBLISHABLE_KEY=pk_test_xxxxxxxxxxxxxxxxx
+```
+
+---
+
+## ▶️ Running the Application
+
+Start the backend:
+
+```bash
+cd Backend/stickora
+./mvnw spring-boot:run
+```
+
+Start the frontend:
+
+```bash
+cd Frontend
+npm install
+npm run dev
+```
+
+Open your browser and visit:
+
+```
+http://localhost:5173
+```
+
+---
+
+## 🌐 Production Deployment
+
+| Service | Platform |
+|---------|----------|
+| Frontend | Vercel |
+| Backend | Render |
+| Database | Neon PostgreSQL |
+| Payment Gateway | Stripe |
+
+---
+## 🔐 Security
+
+Stickora implements multiple security best practices to protect user data and application resources.
+
+- JWT-based Authentication
+- Role-Based Authorization (`ROLE_USER`, `ROLE_ADMIN`)
+- BCrypt Password Hashing
+- Protected REST APIs using Spring Security
+- Secure Stripe Payment Integration
+- Environment Variables for Sensitive Credentials
+
+---
+## 👩‍💻 Author
+
+**Srushti Jagtap**
+
+Computer Engineering Student
+
+---
+## 📄 License
+
+This project is licensed under the MIT License.
