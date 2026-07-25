@@ -1,4 +1,4 @@
-package com.srushti.stickora.controller;
+package com.eazybytes.eazystore.controller;
 
 import com.srushti.stickora.scopes.ApplicationScopedBean;
 import com.srushti.stickora.scopes.RequestScopedBean;

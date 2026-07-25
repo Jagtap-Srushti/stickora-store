@@ -2,9 +2,7 @@ package com.srushti.stickora.controller;
 
 
 import com.srushti.stickora.dto.ContactRequestDto;
-import com.srushti.stickora.dto.ProductDto;
 import com.srushti.stickora.service.IContactService;
-import com.srushti.stickora.service.IProductService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

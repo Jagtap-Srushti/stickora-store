@@ -2,7 +2,6 @@ package com.srushti.stickora.controller;
 
 import com.srushti.stickora.dto.*;
 import com.srushti.stickora.entity.Customer;
-import com.srushti.stickora.entity.Role;
 import com.srushti.stickora.repository.CustomerRepository;
 import com.srushti.stickora.repository.RoleRepository;
 import com.srushti.stickora.util.JwtUtil;
@@ -19,10 +18,7 @@ import org.springframework.security.authentication.password.CompromisedPasswordD
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
