@@ -14,9 +14,8 @@
 
 ## 🚀 Live Demo & Links
 
-* **Frontend App:** [View Live Demo](https://your-vercel-link.vercel.app) *(Replace with your Vercel URL)*
-* **Backend API Docs:** [API Base URL](https://your-render-link.onrender.com) *(Replace with your Render URL)*
-
+* **Live Demo:** [View Live Demo](https://stickora-store.vercel.app/)
+  
 ---
 
 ## 📌 Features
@@ -45,4 +44,56 @@
 * **Deployment & Hosting:** Vercel (Frontend), Render (Backend)
 
 ---
+## 📸 Preview
+
+| Home Page (Light Mode) | Home Page (Dark Mode) |
+|:---:|:---:|
+| ![](Frontend/src/assets/screenshot/image1.png) | ![](Frontend/src/assets/screenshot/image2.png) |
+
+| Contact Us | About Us |
+|:---:|:---:|
+| ![](Frontend/src/assets/screenshot/image4.png) | ![](Frontend/src/assets/screenshot/image12.png) |
+
+| Product Details | Shopping Cart |
+|:---:|:---:|
+| ![](Frontend/src/assets/screenshot/image3.png) | ![](Frontend/src/assets/screenshot/image5.png) |
+
+| Checkout | Stripe Payment |
+|:---:|:---:|
+| ![](Frontend/src/assets/screenshot/image6.png) | ![](Frontend/src/assets/screenshot/image7.png) |
+
+| Profile | Orders |
+|:---:|:---:|
+| ![](Frontend/src/assets/screenshot/image8.png) | ![](Frontend/src/assets/screenshot/image9.png) |
+
+| Admin Order Management | Admin Contact Messages |
+|:---:|:---:|
+| ![](Frontend/src/assets/screenshot/image10.png) | ![](Frontend/src/assets/screenshot/image11.png) |
+
+## 🧩 Architecture
+ 
+<!--
+Add a real architecture diagram here (e.g. drawn in draw.io, Excalidraw, or Mermaid
+exported as PNG) showing: React Client -> REST API (Spring Boot) -> PostgreSQL,
+plus JWT filter chain and Stripe as an external service.
+Save it to docs/architecture.png and reference it below.
+-->
+ 
+<div align="center">
+  <img src="docs/architecture.png" alt="Stickora System Architecture" width="800"/>
+</div>
+**Request flow :**
+ 
+```mermaid
+flowchart LR
+    A[React Client] -- REST / JSON --> B[Spring Boot API]
+    B -- JWT Auth Filter --> C{Role Check}
+    C -- ROLE_USER --> D[Customer Endpoints]
+    C -- ROLE_ADMIN --> E[Admin Endpoints]
+    B -- JPA / Hibernate --> F[(PostgreSQL)]
+    B -- Payment Intent --> G[Stripe API]
+```
+ 
+---
+
 
