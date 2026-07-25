@@ -282,6 +282,3 @@ Stickora implements multiple security best practices to protect user data and ap
 Computer Engineering Student
 
 ---
-## 📄 License
-
-This project is licensed under the MIT License.
