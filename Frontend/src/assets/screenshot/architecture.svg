@@ -1,0 +1,127 @@
+<svg viewBox="0 0 900 1150" xmlns="http://www.w3.org/2000/svg" font-family="'Segoe UI', Helvetica, Arial, sans-serif">
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#5b6472"/>
+    </marker>
+    <linearGradient id="frontendGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#eef3ff"/>
+      <stop offset="100%" stop-color="#dce7fb"/>
+    </linearGradient>
+    <linearGradient id="backendGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#eafaf1"/>
+      <stop offset="100%" stop-color="#d3f2e0"/>
+    </linearGradient>
+    <filter id="softShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="3" stdDeviation="5" flood-color="#1a1f36" flood-opacity="0.12"/>
+    </filter>
+  </defs>
+
+  <rect width="900" height="1150" fill="#f7f8fb"/>
+
+  <text x="450" y="40" text-anchor="middle" font-size="24" font-weight="700" fill="#1a1f36">Stickora — System Architecture</text>
+
+  <!-- Users -->
+  <g filter="url(#softShadow)">
+    <rect x="300" y="70" width="150" height="50" rx="10" fill="#ffffff" stroke="#c9cfdb" stroke-width="1.5"/>
+    <text x="375" y="100" text-anchor="middle" font-size="15" font-weight="600" fill="#1a1f36">👤 Customer</text>
+  </g>
+  <g filter="url(#softShadow)">
+    <rect x="450" y="70" width="150" height="50" rx="10" fill="#ffffff" stroke="#c9cfdb" stroke-width="1.5"/>
+    <text x="525" y="100" text-anchor="middle" font-size="15" font-weight="600" fill="#1a1f36">🛠️ Admin</text>
+  </g>
+
+  <line x1="375" y1="120" x2="450" y2="180" stroke="#5b6472" stroke-width="1.6" marker-end="url(#arrow)"/>
+  <line x1="525" y1="120" x2="450" y2="180" stroke="#5b6472" stroke-width="1.6" marker-end="url(#arrow)"/>
+  <text x="490" y="150" font-size="12" fill="#5b6472">HTTPS</text>
+
+  <!-- Frontend box -->
+  <g filter="url(#softShadow)">
+    <rect x="150" y="185" width="600" height="230" rx="14" fill="url(#frontendGrad)" stroke="#a9c1ef" stroke-width="1.5"/>
+    <text x="450" y="215" text-anchor="middle" font-size="17" font-weight="700" fill="#1a3d8f">React Frontend (Vite)</text>
+
+    <g font-size="13" fill="#28345c">
+      <rect x="180" y="235" width="150" height="34" rx="8" fill="#ffffff" stroke="#b7c8ee"/>
+      <text x="255" y="257" text-anchor="middle">Home</text>
+
+      <rect x="345" y="235" width="180" height="34" rx="8" fill="#ffffff" stroke="#b7c8ee"/>
+      <text x="435" y="257" text-anchor="middle">Product Catalog</text>
+
+      <rect x="540" y="235" width="180" height="34" rx="8" fill="#ffffff" stroke="#b7c8ee"/>
+      <text x="630" y="257" text-anchor="middle">Product Details</text>
+
+      <rect x="180" y="280" width="150" height="34" rx="8" fill="#ffffff" stroke="#b7c8ee"/>
+      <text x="255" y="302" text-anchor="middle">Shopping Cart</text>
+
+      <rect x="345" y="280" width="150" height="34" rx="8" fill="#ffffff" stroke="#b7c8ee"/>
+      <text x="420" y="302" text-anchor="middle">Checkout</text>
+
+      <rect x="510" y="280" width="150" height="34" rx="8" fill="#ffffff" stroke="#b7c8ee"/>
+      <text x="585" y="302" text-anchor="middle">Contact</text>
+
+      <rect x="180" y="325" width="220" height="34" rx="8" fill="#ffffff" stroke="#b7c8ee"/>
+      <text x="290" y="347" text-anchor="middle">Login / Register</text>
+
+      <rect x="420" y="325" width="240" height="34" rx="8" fill="#ffffff" stroke="#b7c8ee"/>
+      <text x="540" y="347" text-anchor="middle">Admin Dashboard</text>
+    </g>
+    <text x="450" y="390" text-anchor="middle" font-size="12" fill="#4a5578" font-style="italic">REST API calls via Axios</text>
+  </g>
+
+  <line x1="450" y1="415" x2="450" y2="460" stroke="#5b6472" stroke-width="1.6" marker-end="url(#arrow)"/>
+  <text x="470" y="442" font-size="12" fill="#5b6472">REST API (Axios)</text>
+
+  <!-- Backend box -->
+  <g filter="url(#softShadow)">
+    <rect x="150" y="465" width="600" height="330" rx="14" fill="url(#backendGrad)" stroke="#8fd6ac" stroke-width="1.5"/>
+    <text x="450" y="495" text-anchor="middle" font-size="17" font-weight="700" fill="#0f6b3d">Spring Boot Backend</text>
+
+    <rect x="220" y="515" width="460" height="46" rx="8" fill="#ffffff" stroke="#9fdcb9"/>
+    <text x="450" y="543" text-anchor="middle" font-size="13" font-weight="600" fill="#1a1f36">Controller Layer</text>
+
+    <line x1="450" y1="561" x2="450" y2="580" stroke="#5b6472" stroke-width="1.4" marker-end="url(#arrow)"/>
+
+    <rect x="180" y="580" width="540" height="46" rx="8" fill="#ffffff" stroke="#9fdcb9"/>
+    <text x="450" y="608" text-anchor="middle" font-size="13" font-weight="600" fill="#1a1f36">Spring Security + JWT Authentication</text>
+
+    <line x1="450" y1="626" x2="450" y2="645" stroke="#5b6472" stroke-width="1.4" marker-end="url(#arrow)"/>
+
+    <rect x="220" y="645" width="460" height="46" rx="8" fill="#ffffff" stroke="#9fdcb9"/>
+    <text x="450" y="673" text-anchor="middle" font-size="13" font-weight="600" fill="#1a1f36">Service Layer (Business Logic)</text>
+
+    <line x1="450" y1="691" x2="450" y2="710" stroke="#5b6472" stroke-width="1.4" marker-end="url(#arrow)"/>
+
+    <rect x="200" y="710" width="500" height="46" rx="8" fill="#ffffff" stroke="#9fdcb9"/>
+    <text x="450" y="738" text-anchor="middle" font-size="13" font-weight="600" fill="#1a1f36">Repository Layer (Spring Data JPA)</text>
+  </g>
+
+  <!-- Split arrows to DB and Stripe -->
+  <line x1="330" y1="795" x2="290" y2="850" stroke="#5b6472" stroke-width="1.6" marker-end="url(#arrow)"/>
+  <line x1="570" y1="795" x2="610" y2="850" stroke="#5b6472" stroke-width="1.6" marker-end="url(#arrow)"/>
+
+  <!-- PostgreSQL box -->
+  <g filter="url(#softShadow)">
+    <rect x="110" y="855" width="330" height="220" rx="14" fill="#ffffff" stroke="#c9cfdb" stroke-width="1.5"/>
+    <text x="275" y="890" text-anchor="middle" font-size="15" font-weight="700" fill="#1a1f36">🗄️ PostgreSQL Database</text>
+    <text x="275" y="910" text-anchor="middle" font-size="12" fill="#5b6472">(NeonDB)</text>
+    <g font-size="13" fill="#28345c">
+      <text x="140" y="945">• Users</text>
+      <text x="140" y="975">• Products</text>
+      <text x="140" y="1005">• Cart</text>
+      <text x="140" y="1035">• Orders</text>
+      <text x="140" y="1060">• Contact Messages</text>
+    </g>
+  </g>
+
+  <!-- Stripe box -->
+  <g filter="url(#softShadow)">
+    <rect x="460" y="855" width="330" height="220" rx="14" fill="#ffffff" stroke="#c9cfdb" stroke-width="1.5"/>
+    <text x="625" y="890" text-anchor="middle" font-size="15" font-weight="700" fill="#1a1f36">💳 Stripe Payment Gateway</text>
+    <g font-size="13" fill="#28345c">
+      <text x="490" y="935">• Checkout Session</text>
+      <text x="490" y="965">• Payment Processing</text>
+      <text x="490" y="995">• Payment Confirmation</text>
+    </g>
+  </g>
+
+  <text x="450" y="1120" text-anchor="middle" font-size="12" fill="#8a93a6">React (Vercel) → Spring Boot (Render) → PostgreSQL / Stripe</text>
+</svg>
